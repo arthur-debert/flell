@@ -1,0 +1,27 @@
+package flshell.bin {
+    import flshell.paths.*;
+    import flash.utils.Dictionary;
+	import flshell.Command;
+	import flshell.CommandOption;
+    import flshell.Output;
+    import flshell.Environment
+	public class Pwd extends Command {
+	    public static var NAME :String = "pwd";
+	    
+		public function Pwd(environment : Environment){
+            super(environment, Cd);
+		    baseOptions  = [];
+		}
+		
+		override public function executeRaw(text : String) : Output{
+		    return super.executeRaw(text);
+	    }
+	    
+		override public function execute(options : Array, args : Array) : Output{
+            return new Output(String(environment.currentDir.fullPath), 0);
+		}
+
+    
+	}
+	
+}

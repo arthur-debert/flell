@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*" xmlns:runners="kisstest.runners.*" creationComplete="handleCreation()" xmlns:runners1="br.com.stimuli.kisstest.runners.*">
+    <mx:Script>
+        <![CDATA[
+        import flell.tests.FlellTestSuite;
+        import br.com.stimuli.kisstest.runners.GUIFlexRunner;
+        
+        
+        public function handleCreation() : void{
+               addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
+        }
+        
+        public function onAddedToStage(e : Event) :void{
+            var suite : FlellTestSuite = new FlellTestSuite();
+            
+            suite.init(stage);
+            runner.createAndRun("Flell test suite", suite);    
+        }
+        ]]>
+    </mx:Script>
+    <runners1:GUIFlexRunner id="runner">
+        
+    </runners1:GUIFlexRunner>
+
+</mx:Application>

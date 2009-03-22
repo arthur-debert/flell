@@ -62,12 +62,12 @@ package flell {
 		    if (path.charAt(0) != "/"){
 		        path = environment.currentDir + "/" + path;
 		    }
-		    var basePath : String = PathResolver.split(path)[0];
+		    var basePath : String = split(path)[0];
 		    if(!basePath){
 		        return [];
 		    }
 		    trace("{Shell}::method() basePath", path);
-		    var baseDisplayObject  : PathPart = PathResolver.resolve(environment, basePath);
+		    var baseDisplayObject  : PathPart = resolvePath(environment, basePath);
 		    return  baseDisplayObject.children.filter(function(pathPart : PathPart, ...rest) : Boolean{
 		        trace(pathPart, path);
 		        return pathPart.nameMatches(path);

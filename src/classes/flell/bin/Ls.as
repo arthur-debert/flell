@@ -23,7 +23,7 @@ package flell.bin {
 	    }
 	    
 		override public function execute(options : Array, args : Array) : Output{
-            var fromPath : PathPart = PathResolver.resolve(environment, args[0] || String(environment.currentDir));
+            var fromPath : PathPart = resolvePath(environment, args[0] || String(environment.currentDir));
             var isRecursive : Boolean = Boolean(getOptionValues('r')[0]);
             var children : Array = getChildren(fromPath, isRecursive);
             

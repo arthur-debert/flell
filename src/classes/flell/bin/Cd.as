@@ -1,10 +1,8 @@
 package flell.bin {
-    import flell.paths.*;
-    import flash.utils.Dictionary;
-	import flell.Command;
-	import flell.CommandOption;
+    import flell.Command;
+    import flell.Environment;
     import flell.Output;
-    import flell.Environment
+    import flell.paths.*;
 	public class Cd extends Command {
 	    public static var NAME :String = "cd";
 	    
@@ -20,7 +18,7 @@ package flell.bin {
 	    
 		override public function execute(options : Array, args : Array) : Output{
 		    try{
-		        var toPath : PathPart = PathResolver.resolve(environment, args[0] || "/");            
+		        var toPath : PathPart = resolvePath(environment, args[0] || "/");            
                 environment.currentDir = toPath;
                 return new Output("", 0);
 		    }catch(e : Error){

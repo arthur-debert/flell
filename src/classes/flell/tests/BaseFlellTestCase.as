@@ -11,6 +11,7 @@ package flell.tests
     {
         public var shell : Shell;
         public var testSpriteCreated : int  = 0;
+        public static const TREE_NODE_NAME : String = "testTree";
         
         public function BaseFlellTestCase(name : String)
         {
@@ -22,10 +23,11 @@ package flell.tests
             shell = new Shell();
             shell.init(FlellTestSuite.stage);
             var stage : Stage = FlellTestSuite.stage;
-            var rootNode : Sprite = stage.getChildByName("testTree") as Sprite;
+            var rootNode : Sprite = stage.getChildByName(TREE_NODE_NAME) as Sprite;
             if (rootNode) { stage.removeChild(rootNode)};
             rootNode = new Sprite();
-            rootNode.name = "testTree";
+            rootNode.name = TREE_NODE_NAME;
+            stage.addChild(rootNode);
             testSpriteCreated = 0;
             createTestDisplayTree(rootNode, 0, 3);
         }

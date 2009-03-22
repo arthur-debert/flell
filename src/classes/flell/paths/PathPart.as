@@ -2,10 +2,9 @@ package flell.paths {
 		
 	import flash.display.*;
 	import flash.text.TextField;
-	
-	import flell.utils.printStackTrace;
 	public class PathPart {
 		public var source : DisplayObject;
+		
 		
 		public function PathPart(source : DisplayObject){
 			this.source = source;
@@ -44,10 +43,10 @@ package flell.paths {
 		}
 		
 		public function get fullPath() : String{
-		    var thePath : String = "";
+		    var thePath : String = PathResolver.PATH_SEPARATOR;
 		    if (parent){
 		        thePath = parent.fullPath;
-		        thePath +=  source.name + ".";
+		        thePath +=  source.name + PathResolver.PATH_SEPARATOR;
 		    }
 		    
 		    return thePath;
@@ -67,7 +66,11 @@ package flell.paths {
         }
 		public function getChildByName(name : String) : PathPart{
 		    if (source is DisplayObjectContainer){
-		        return  PathResolver.getFrom((source as DisplayObjectContainer).getChildByName(name));
+		        trace(source as DisplayObjectContainer);
+		        
+		        var disObj : DisplayObject = (source as DisplayObjectContainer).getChildByName(name);
+		        trace(disObj);
+		        return  PathResolver.getFrom(disObj);
 		    }
 		    return null;
 		}
@@ -90,6 +93,7 @@ package flell.paths {
 		public function nameMatches(toMatch : String) : Boolean{
 		    return source.name.search(new RegExp(toMatch)) > 0;
 		}
+		
 		public function toString() : String{
 		    // 
 		    if (source is Stage){
@@ -97,5 +101,7 @@ package flell.paths {
 		    }
 		    return source.name;
 		}
+		
+		
 	}	
 }

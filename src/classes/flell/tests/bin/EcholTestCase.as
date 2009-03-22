@@ -12,6 +12,7 @@ package flell.tests.bin
         }
         
         override public function setUp() : void{
+            super.setUp();
             dispatchEvent(new Event(Event.INIT, false, false));
         }
         

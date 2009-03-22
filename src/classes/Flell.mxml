@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*" xmlns:runners="kisstest.runners.*" creationComplete="handleCreation()" xmlns:runners1="br.com.stimuli.kisstest.runners.*">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*" xmlns:runners="kisstest.runners.*" creationComplete="handleCreation()" xmlns:runners1="br.com.stimuli.kisstest.runners.*"
+    width="1500" height="800"
+>
     <mx:Script>
         <![CDATA[
         import flell.tests.FlellTestSuite;

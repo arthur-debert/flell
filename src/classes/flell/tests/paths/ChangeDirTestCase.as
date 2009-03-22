@@ -34,9 +34,15 @@ package flell.tests.paths
         }
         
         public function testTwoLevelChange() : void{
-            var changedTo : PathPart = changeDir(shell.environment, joinStr(PathResolver.PATH_SEPARATOR, BaseFlellTestCase.TREE_NODE_NAME, "sp_1_2"));
+            var joined : String =  joinStr( "/"+BaseFlellTestCase.TREE_NODE_NAME, "sp_0_2");
+            
+            //PathResolver.dumpAll(shell.environment.stage);
+            var changedTo : PathPart = changeDir(shell.environment,joined);
+            assertNotNull(changedTo);
+            joined =  joinStr( "/"+BaseFlellTestCase.TREE_NODE_NAME, "sp_0_2", "sp_1_1");
             assertNotNull(changedTo);
         }
+        
     
     }
 }

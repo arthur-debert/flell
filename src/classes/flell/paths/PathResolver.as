@@ -1,7 +1,9 @@
 package flell.paths {
-    import flash.utils.Dictionary;
+    import flash.display.DisplayObject;
     
-    import flell.Environment;
+    import mx.utils.DisplayUtil;
+    
+    import flash.utils.Dictionary;
 	public class PathResolver extends Object {        
         public static var __objects : Dictionary = new Dictionary(true);
         
@@ -22,8 +24,18 @@ package flell.paths {
         
         
         
+		public static function dumpAll(rootNode : DisplayObject) : void{
+		    DisplayUtil.walkDisplayObjects(rootNode, printWithDepth);
+		} 
 		
-		
+		public static function printWithDepth (obj : DisplayObject) : void{
+		    var pad : String = obj.name;
+		    while (obj.parent){
+		        obj = obj.parent;
+		        pad = "_" + pad;
+		    }
+		   trace(pad); 
+		}
 		
 	}	
 }

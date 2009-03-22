@@ -1,6 +1,6 @@
 package flell.paths{
 /**
-*    Joins a list of path parts. This will make sure that multiple separators
+*    Joins a list of path parts. Mimics python join behaviour.
 *      
 */    
     public function joinStr(...paths) : String{

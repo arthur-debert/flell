@@ -6,6 +6,7 @@ package flell.paths{
             var current : PathPart
             if (isAbsolute(pathName)){
                 current =  PathResolver.getFrom(environment.stage);
+                pathName = pathName.substr(1 );
             }else{
                 current = environment.currentDir;
             }
@@ -15,6 +16,7 @@ package flell.paths{
             var dobj : *;
             
             while (parts.length > 0){
+                
                 current = current.getChildByName(parts[0]);
                 if (!current){
                         return  null;

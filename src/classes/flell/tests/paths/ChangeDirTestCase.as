@@ -22,7 +22,6 @@ package flell.tests.paths
         
         public function testOneLevelChange() : void{
             var changedTo : PathPart = changeDir(shell.environment, BaseFlellTestCase.TREE_NODE_NAME);
-            trace("changedTo", changedTo);
             assertNotNull(changedTo);
             assertEquals( changedTo.source, FlellTestSuite.stage.getChildByName(BaseFlellTestCase.TREE_NODE_NAME));
             assertEquals(PathResolver.getFrom(changedTo.source), changedTo);
@@ -33,5 +32,11 @@ package flell.tests.paths
             assertNull(changeDir(shell.environment, "this_does_not_exist"));
             assertNull(changeDir(shell.environment, BaseFlellTestCase.TREE_NODE_NAME + PathResolver.PATH_SEPARATOR + "this_does_not_exist"));
         }
+        
+        public function testTwoLevelChange() : void{
+            var changedTo : PathPart = changeDir(shell.environment, joinStr(PathResolver.PATH_SEPARATOR, BaseFlellTestCase.TREE_NODE_NAME, "sp_1_2"));
+            assertNotNull(changedTo);
+        }
+    
     }
 }

@@ -19,7 +19,6 @@ package flell {
 		}
 		
 		public function init(stage : Stage) : void{
-		    trace("******* INITINF");
 		    this.stage  = stage;
 		    environment = new Environment(stage);
 		    var commandClass: Class;

@@ -2,6 +2,7 @@ package flell.paths {
 		
 	import flash.display.*;
 	import flash.text.TextField;
+	
 	public class PathPart {
 		public var source : DisplayObject;
 		
@@ -66,10 +67,7 @@ package flell.paths {
         }
 		public function getChildByName(name : String) : PathPart{
 		    if (source is DisplayObjectContainer){
-		        trace(source as DisplayObjectContainer);
-		        
 		        var disObj : DisplayObject = (source as DisplayObjectContainer).getChildByName(name);
-		        trace(disObj);
 		        return  PathResolver.getFrom(disObj);
 		    }
 		    return null;

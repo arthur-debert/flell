@@ -1,10 +1,10 @@
 package flell.tests
 {    
     import br.com.stimuli.kisstest.TestSuite;
-    import flell.tests.paths.ChangeDirTestCase;
     import flash.display.Stage;
     
     import flell.tests.bin.EcholTestCase;
+    import flell.tests.paths.*;
      
     public class FlellTestSuite extends TestSuite
     {
@@ -20,6 +20,7 @@ package flell.tests
         public function init(stage : Stage) : void{
             FlellTestSuite.stage = stage;
             testClasses = [
+                JoinStringTestCase,
                 ChangeDirTestCase,
                 EcholTestCase
                 

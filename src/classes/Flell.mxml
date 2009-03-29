@@ -4,6 +4,8 @@
 >
     <mx:Script>
         <![CDATA[
+            import flell.terminal.FlellTerm;
+            import flell.FlellTerminal;
         import flell.tests.FlellTestSuite;
         import br.com.stimuli.kisstest.runners.GUIFlexRunner;
         
@@ -13,10 +15,12 @@
         }
         
         public function onAddedToStage(e : Event) :void{
-            var suite : FlellTestSuite = new FlellTestSuite();
+            //var suite : FlellTestSuite = new FlellTestSuite();
             
-            suite.init(stage);
-            runner.createAndRun("Flell test suite", suite);    
+            //suite.init(stage);
+            //runner.createAndRun("Flell test suite", suite);
+            var terminal : FlellTerm = new FlellTerm();
+            addChild(terminal);    
         }
         ]]>
     </mx:Script>

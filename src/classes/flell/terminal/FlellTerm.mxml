@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<flell:DragPanel  xmlns:flell="flell.terminal.*" layout="absolute" width="800" height="400" xmlns:mx="http://www.adobe.com/2006/mxml">
+    <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" x="0" y="0" width="780" height="360" creationComplete="onCreationComplete()">
+        <mx:HBox width="100%" height="20">
+            <mx:Button label="clear" id="clearButton"/>
+            <mx:Button label="copy" id="copyButton"/>
+        </mx:HBox>
+        <flell:OpenTextArea width="780" height="380" text="" id="outText" />
+        
+    </mx:VBox>
+    
+    <mx:Script>
+        <![CDATA[
+            import mx.messaging.channels.StreamingAMFChannel;
+            import flell.Shell;
+            
+            public var shell : Shell;
+            
+            public static var SHELL_DELIMETER : String = "$";
+            
+            public function onCreationComplete() : void{
+                clearButton.addEventListener(MouseEvent.CLICK, clearTerm);
+                copyButton.addEventListener(MouseEvent.CLICK, copyText);
+                outText.addEventListener(TextEvent.TEXT_INPUT, onInputText);
+                outText.addEventListener(Event.CHANGE, eChanged);
+                shell = new Shell();
+                shell.init(this.stage);
+                clearTerm();    
+            }
+            
+            public function clearTerm(e: Event = null) : void{
+                outText.text = SHELL_DELIMETER;
+                moveCursorToEnd();
+            }
+            
+            public function copyText(e : Event = null) : void{
+                
+            }
+            
+            public function eChanged ( e : Event) : void{
+                
+            }
+            
+            public function getLastLine() : String{
+                var lines : Array = outText.text.split("\n");
+                trace("lines:", lines.length);
+                lines.forEach(function (l:*, ...rest):void{
+                    trace("'" + l + "'");
+                });
+                 trace("----------------");
+                 var lastLine : String = lines[lines.length -1]; 
+                return lastLine.substring(lastLine.indexOf(SHELL_DELIMETER)+1);
+            }
+            
+            public function addToOutput(text : String) : void{
+                outText.text +=  "\n"+ text + "\n" + SHELL_DELIMETER;
+            }
+            
+            public function moveCursorToEnd() : void{
+                outText.setSelection(outText.text.length,outText.text.length );
+            }
+            
+            public function onInputText ( e : TextEvent) : void{
+                //trace(e.text.charCodeAt(0), e.text, Keyboard.ENTER);
+                var charCode : int = e.text.charCodeAt(0) 
+                if ( charCode == Keyboard.ENTER || charCode == 10 ){
+                    var rawCommand : String = getLastLine();
+                    trace("raw command", rawCommand);
+                    var out :String = shell.executeRaw(rawCommand);
+                    addToOutput(out);
+                    e.preventDefault();
+                    moveCursorToEnd();
+                }
+                
+            }
+        ]]>
+    </mx:Script>
+        
+</flell:DragPanel>

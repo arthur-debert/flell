@@ -33,7 +33,7 @@ package flell {
 		
 		public function executeRaw(text : String) : String{;
 		    //var COMMAND_RE : RegExp = /^\b(P?<name>[\w\d]+)\b\b(P?<flag>-[\w\d]+)()
-		    var COMMAND_RE : RegExp = /^\b(?P<name>[\w\d]+)\b\s/g;
+		    var COMMAND_RE : RegExp = /^\b(?P<name>[\w\d]+)\b\s*/g;
 		    var match : Object = COMMAND_RE.exec(text);
             /*for (var prop in match){
                 trace(prop, ":", match[prop]);

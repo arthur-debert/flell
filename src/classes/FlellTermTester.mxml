@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="handleCreation()" width="900" height="700">
+
+<mx:Script>
+    <![CDATA[
+           import flell.terminal.FlellTerm;
+            
+        
+        
+        public function handleCreation() : void{
+               addEventListener(Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true);
+        }
+        
+        public function onAddedToStage(e : Event) :void{
+            var terminal : FlellTerm = new FlellTerm();
+            terminal.title = "Flell :: " + root.loaderInfo.url;
+            addChild(terminal);    
+        }
+    ]]>
+</mx:Script>
+        
+</mx:Application>

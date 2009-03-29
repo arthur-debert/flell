@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionScriptProperties mainApplicationPath="Flell.mxml" version="3">
+<actionScriptProperties mainApplicationPath="FlellTermTester.mxml" version="3">
 <compiler additionalCompilerArguments="-locale en_US" copyDependentFiles="true" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersion="9.0.28" htmlPlayerVersionCheck="true" outputFolderPath="publish" sourceFolderPath="src/classes" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
 <compilerSourcePath>
 <compilerSourcePathEntry kind="1" linkType="1" path="src/third-parties/classes"/>
@@ -14,6 +14,7 @@
 </compiler>
 <applications>
 <application path="Flell.mxml"/>
+<application path="FlellTermTester.mxml"/>
 </applications>
 <modules/>
 <buildCSSFiles/>

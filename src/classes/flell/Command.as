@@ -1,5 +1,5 @@
 /* AS3
-	Copyright 2008 __MyCompanyName__.
+	Copyright 2007 Arthur Debert.
 */
 package flell {
 	import flash.utils.Dictionary;

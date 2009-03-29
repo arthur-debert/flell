@@ -65,7 +65,7 @@
                 var charCode : int = e.text.charCodeAt(0) 
                 if ( charCode == Keyboard.ENTER || charCode == 10 ){
                     var rawCommand : String = getLastLine();
-                    trace("raw command", rawCommand);
+                    trace("___raw command", rawCommand);
                     var out :String = shell.executeRaw(rawCommand);
                     addToOutput(out);
                     e.preventDefault();

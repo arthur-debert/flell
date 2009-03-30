@@ -39,7 +39,11 @@ package flell {
                 trace(prop, ":", match[prop]);
             }*/
 		    var name :  String  = match.name;
-		    var command : Command = new environment.commands[name](environment);
+		    var commandClass : Class = environment.commands[name];
+		    if(!commandClass){
+		        return name + " is not a known command";
+		    }
+		    var command : Command = new commandClass(environment);
 		    var rest : String = text.substr(match.index + name.length +1);
 		    var output : String  = String(command.executeRaw(rest));
 		    dispatchEvent(new OutputEvent(OutputEvent.OUTPUT, true, false, output));

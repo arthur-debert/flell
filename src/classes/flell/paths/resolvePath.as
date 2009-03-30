@@ -10,7 +10,7 @@ package flell.paths{
             }else{
                 current = environment.currentDir;
             }
-            if(pathName == PathResolver.PATH_SEPARATOR) return current;
+            if(pathName == PathResolver.PATH_SEPARATOR || pathName == "") return current;
             
             var parts : * = pathName.split(PathResolver.PATH_SEPARATOR);
             var dobj : *;

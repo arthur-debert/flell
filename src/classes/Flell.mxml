@@ -5,7 +5,7 @@
     <mx:Script>
         <![CDATA[
             import flell.terminal.FlellTerm;
-            import flell.FlellTerminal;
+            //import flell.FlellTerminal;
         import flell.tests.FlellTestSuite;
         import br.com.stimuli.kisstest.runners.GUIFlexRunner;
         

@@ -23,7 +23,12 @@ package flell.bin {
 	    }
 	    
 		override public function execute(options : Array, args : Array) : Output{
-            var fromPath : PathPart = resolvePath(environment, args[0] || String(environment.currentDir));
+		    var resolveFrom : String =   String(environment.currentDir);
+		    if (args[0] && args[0].length > 1){
+		        resolveFrom = args[0] 
+		    }
+		    trace("resolveFrom", resolveFrom);
+            var fromPath : PathPart = resolvePath(environment, resolveFrom);
             var isRecursive : Boolean = Boolean(getOptionValues('r')[0]);
             var children : Array = getChildren(fromPath, isRecursive);
             
@@ -58,6 +63,7 @@ package flell.bin {
         public function getChildren(fromPath : PathPart, recursive : Boolean = false) : Array{
             var children : Array = [];
             var tempPathPart : PathPart;
+            
             for (var i:int = 0; i<fromPath.numChildren; i++)
             {
               tempPathPart = fromPath.getChildAt(i);

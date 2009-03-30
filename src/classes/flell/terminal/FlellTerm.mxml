@@ -42,18 +42,20 @@
             }
             
             public function getLastLine() : String{
-                var lines : Array = outText.text.split("\n");
-                trace("lines:", lines.length);
-                lines.forEach(function (l:*, ...rest):void{
-                    trace("'" + l + "'");
-                });
-                 trace("----------------");
+                //trace ("raw text:" + outText.text + "\n/finished");
+                var lines : Array = outText.text.split("\r");
+//                trace("lines:", lines.length);
+//                trace("----------------");
+//                lines.forEach(function (l:*, ...rest):void{
+//                    trace("\t'" + l + "'");
+//                });
+//                 trace("----------------");
                  var lastLine : String = lines[lines.length -1]; 
                 return lastLine.substring(lastLine.indexOf(SHELL_DELIMETER)+1);
             }
             
             public function addToOutput(text : String) : void{
-                outText.text +=  "\n"+ text + "\n" + SHELL_DELIMETER;
+                outText.text +=  "\r"+ text + "\r" + SHELL_DELIMETER;
             }
             
             public function moveCursorToEnd() : void{
@@ -61,12 +63,16 @@
             }
             
             public function onInputText ( e : TextEvent) : void{
-                //trace(e.text.charCodeAt(0), e.text, Keyboard.ENTER);
                 var charCode : int = e.text.charCodeAt(0) 
                 if ( charCode == Keyboard.ENTER || charCode == 10 ){
                     var rawCommand : String = getLastLine();
-                    trace("___raw command", rawCommand);
-                    var out :String = shell.executeRaw(rawCommand);
+                    //trace("___raw command", rawCommand);
+                    var out :String;
+                    try{
+                        out = shell.executeRaw(rawCommand);
+                    }catch(e : Error){
+                        out  = e.getStackTrace() || e.message;
+                    }
                     addToOutput(out);
                     e.preventDefault();
                     moveCursorToEnd();

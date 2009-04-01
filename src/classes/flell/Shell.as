@@ -60,19 +60,47 @@ package flell {
 		    return matching;
 		}
 		
+		public function getCompletion (input : String) : CompletionResult {
+		    var raw : Array = input.split(" ");
+		    var result : CompletionResult;
+		    if (raw.length == 1 && raw[0].length == 0){
+		        // nothing to complete here, backoff
+		        result = new CompletionResult([]);
+		    }else if(raw.length == 1){
+		        // trying a command:
+		        var possibleCommands : Array = getCompletionsForCommand(raw[0]);
+		        result = new CompletionResult(possibleCommands);
+		    }else{
+		        // should be a path:
+		        var possiblePaths : Array = getCompletionsForPath(raw[raw.length -1]);
+		        result = new CompletionResult(possiblePaths);
+		    }
+		    return result;
+		}
 		public function getCompletionsForPath(path : String) : Array{
 		    
-		    if (path.charAt(0) != "/"){
-		        path = environment.currentDir + "/" + path;
+		    //var pathStart : PathPart = environment.currentDir;
+		    var pathParts : Array = path.split("/");
+		    var searchFrom : PathPart = environment.currentDir;
+		    if(path.charAt(0) == PathResolver.PATH_SEPARATOR){
+		        searchFrom = PathResolver.getFrom(environment.stage);
 		    }
-		    var basePath : String = split(path)[0];
-		    if(!basePath){
-		        return [];
+		    
+		    var basePath : PathPart = null;
+		    if (pathParts.length > 1){
+		        basePath = resolvePath(environment,  pathParts.slice(0, -1).join(PathResolver.PATH_SEPARATOR ) ); 
+		        if (!basePath){
+		            return []; 
+		        }
+		    }else{
+		        basePath = environment.currentDir;
 		    }
-		    trace("{Shell}::method() basePath", path);
-		    var baseDisplayObject  : PathPart = resolvePath(environment, basePath);
-		    return  baseDisplayObject.children.filter(function(pathPart : PathPart, ...rest) : Boolean{
-		        trace(pathPart, path);
+//		    if (!isAbsolute(path)) {
+//		        basePath = resolvePath(environment, basePath.toString());
+//		        if (!basePath ) return [];
+//		    }
+		    return  basePath.children.filter(function(pathPart : PathPart, ...rest) : Boolean{
+		        trace(pathPart, path, pathPart.nameMatches(path));
 		        return pathPart.nameMatches(path);
 		    });
 		}

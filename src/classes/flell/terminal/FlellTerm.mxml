@@ -11,6 +11,7 @@
     
     <mx:Script>
         <![CDATA[
+            import flell.CompletionResult;
             import mx.messaging.channels.StreamingAMFChannel;
             import flell.Shell;
             
@@ -21,12 +22,15 @@
             public function onCreationComplete() : void{
                 clearButton.addEventListener(MouseEvent.CLICK, clearTerm);
                 copyButton.addEventListener(MouseEvent.CLICK, copyText);
-                outText.addEventListener(TextEvent.TEXT_INPUT, onInputText);
-                outText.addEventListener(Event.CHANGE, eChanged);
+                outText.addEventListener(TextEvent.TEXT_INPUT, onInputText, true);
+                systemManager.stage.addEventListener(KeyboardEvent.KEY_DOWN, onTabPressed, true, int.MAX_VALUE);
                 shell = new Shell();
                 shell.init(this.stage);
                 clearTerm();    
+
+                tabEnabled = tabChildren = false;
             }
+            
             
             public function clearTerm(e: Event = null) : void{
                 outText.text = SHELL_DELIMETER;
@@ -37,9 +41,6 @@
                 
             }
             
-            public function eChanged ( e : Event) : void{
-                
-            }
             
             public function getLastLine() : String{
                 //trace ("raw text:" + outText.text + "\n/finished");
@@ -55,7 +56,23 @@
             }
             
             public function addToOutput(text : String) : void{
-                outText.text +=  "\r"+ text + "\r" + SHELL_DELIMETER;
+                outText.text +=  "\r"+ text + "\r" + getDelimeter();
+            }
+            
+            public function getDelimeter() : String{
+                return SHELL_DELIMETER;
+            }
+            public function completeLineWith(completion : String) : void{
+                var commandRaw : String = getLastLine();
+                var lines : Array = outText.text.split("\r"); 
+                lines[lines.length -1 ]  = getDelimeter() + commandRaw.substring(0, commandRaw.lastIndexOf(" ")) + completion;
+                outText.text = lines.join("\r");
+                moveCursorToEnd();
+            }
+            
+            public function getTextAfterMarker() : String{
+                var lastLine : String = getLastLine();
+                return lastLine.substring(0, lastLine.indexOf(SHELL_DELIMETER));
             }
             
             public function moveCursorToEnd() : void{
@@ -63,10 +80,12 @@
             }
             
             public function onInputText ( e : TextEvent) : void{
-                var charCode : int = e.text.charCodeAt(0) 
+                
+                var charCode : int = e.text.charCodeAt(0);
+                trace(charCode);
                 if ( charCode == Keyboard.ENTER || charCode == 10 ){
                     var rawCommand : String = getLastLine();
-                    //trace("___raw command", rawCommand);
+                    trace("___raw command", rawCommand);
                     var out :String;
                     try{
                         out = shell.executeRaw(rawCommand);
@@ -78,6 +97,24 @@
                     moveCursorToEnd();
                 }
                 
+            }
+            
+            public function onTabPressed( evt : KeyboardEvent) : void{
+                if (evt.charCode == Keyboard.TAB){
+                    
+                    var result : CompletionResult = shell.getCompletion(getLastLine());
+                    trace("results length :", result.results.length, "results:" + result.results);
+                    if (result.type == CompletionResult.TYPE_ERROR){
+                        trace("bad!");
+                    }else if (result.type == CompletionResult.TYPE_SINGLE){
+                        completeLineWith(" " +  result.results[0]);
+                    }else{
+                        
+                        addToOutput(result.results.join(" "));
+                        moveCursorToEnd();
+                    }
+                    evt.preventDefault();
+                }
             }
         ]]>
     </mx:Script>

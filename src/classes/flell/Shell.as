@@ -95,13 +95,11 @@ package flell {
 		    }else{
 		        basePath = environment.currentDir;
 		    }
-//		    if (!isAbsolute(path)) {
-//		        basePath = resolvePath(environment, basePath.toString());
-//		        if (!basePath ) return [];
-//		    }
+
 		    return  basePath.children.filter(function(pathPart : PathPart, ...rest) : Boolean{
-		        trace(pathPart, path, pathPart.nameMatches(path));
 		        return pathPart.nameMatches(path);
+		    }).map(function ( p : PathPart, ...rest) : String{
+		       return p.fullPath; 
 		    });
 		}
 		

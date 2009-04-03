@@ -43,14 +43,8 @@
             
             
             public function getLastLine() : String{
-                //trace ("raw text:" + outText.text + "\n/finished");
+                
                 var lines : Array = outText.text.split("\r");
-//                trace("lines:", lines.length);
-//                trace("----------------");
-//                lines.forEach(function (l:*, ...rest):void{
-//                    trace("\t'" + l + "'");
-//                });
-//                 trace("----------------");
                  var lastLine : String = lines[lines.length -1]; 
                 return lastLine.substring(lastLine.indexOf(SHELL_DELIMETER)+1);
             }
@@ -64,8 +58,8 @@
             }
             public function completeLineWith(completion : String) : void{
                 var commandRaw : String = getLastLine();
-                var lines : Array = outText.text.split("\r"); 
-                lines[lines.length -1 ]  = getDelimeter() + commandRaw.substring(0, commandRaw.lastIndexOf(" ")) + completion;
+                var lines : Array = outText.text.split("\r");  
+                lines[lines.length -1 ]  = getDelimeter() + commandRaw.substring(0, commandRaw.lastIndexOf(" ") + 1) + completion;
                 outText.text = lines.join("\r");
                 moveCursorToEnd();
             }
@@ -82,10 +76,9 @@
             public function onInputText ( e : TextEvent) : void{
                 
                 var charCode : int = e.text.charCodeAt(0);
-                trace(charCode);
                 if ( charCode == Keyboard.ENTER || charCode == 10 ){
                     var rawCommand : String = getLastLine();
-                    trace("___raw command", rawCommand);
+                    //trace("___raw command", rawCommand);
                     var out :String;
                     try{
                         out = shell.executeRaw(rawCommand);
@@ -103,11 +96,10 @@
                 if (evt.charCode == Keyboard.TAB){
                     
                     var result : CompletionResult = shell.getCompletion(getLastLine());
-                    trace("results length :", result.results.length, "results:" + result.results);
                     if (result.type == CompletionResult.TYPE_ERROR){
                         trace("bad!");
                     }else if (result.type == CompletionResult.TYPE_SINGLE){
-                        completeLineWith(" " +  result.results[0]);
+                        completeLineWith(  result.results[0]);
                     }else{
                         
                         addToOutput(result.results.join(" "));

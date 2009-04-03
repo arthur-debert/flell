@@ -90,7 +90,6 @@ package flell.paths {
 		
 		public function nameMatches(toMatch : String) : Boolean{
 		    var srcName : String = source.name;
-		    trace(srcName, toMatch, srcName.search( new RegExp(toMatch) ));
 		    return source.name.search(new RegExp(toMatch)) > -10;
 		}
 		

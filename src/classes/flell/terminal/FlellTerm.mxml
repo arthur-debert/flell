@@ -11,6 +11,8 @@
     
     <mx:Script>
         <![CDATA[
+            import flell.tests.FlellTestSuite;
+            import flell.tests.BaseFlellTestCase;
             import flell.CompletionResult;
             import mx.messaging.channels.StreamingAMFChannel;
             import flell.Shell;
@@ -23,12 +25,18 @@
                 clearButton.addEventListener(MouseEvent.CLICK, clearTerm);
                 copyButton.addEventListener(MouseEvent.CLICK, copyText);
                 outText.addEventListener(TextEvent.TEXT_INPUT, onInputText, true);
-                systemManager.stage.addEventListener(KeyboardEvent.KEY_DOWN, onTabPressed, true, int.MAX_VALUE);
+                outText.addEventListener(KeyboardEvent.KEY_UP, onControlKeyPressed, true, int.MIN_VALUE, true);
+                
                 shell = new Shell();
                 shell.init(this.stage);
                 clearTerm();    
 
                 tabEnabled = tabChildren = false;
+                outText.setFocus();
+                focusManager.deactivate();
+                FlellTestSuite.stage = stage;
+                var t : BaseFlellTestCase = new BaseFlellTestCase("fdf");
+                t.setUp();
             }
             
             
@@ -49,6 +57,17 @@
                 return lastLine.substring(lastLine.indexOf(SHELL_DELIMETER)+1);
             }
             
+            public function getNumberLines () : int{
+                return outText.text.split("\r").length;
+            }
+            
+            public function replaceLastLine(newValue : String):void{
+                var lines : Array = outText.text.split("\r").slice(0, getNumberLines() - 1);
+                var lastLine : String = getDelimeter() + newValue;
+                lines.push(lastLine);
+                outText.text = lines.join("\r");
+                
+            }
             public function addToOutput(text : String) : void{
                 outText.text +=  "\r"+ text + "\r" + getDelimeter();
             }
@@ -92,21 +111,64 @@
                 
             }
             
-            public function onTabPressed( evt : KeyboardEvent) : void{
-                if (evt.charCode == Keyboard.TAB){
-                    
-                    var result : CompletionResult = shell.getCompletion(getLastLine());
-                    if (result.type == CompletionResult.TYPE_ERROR){
-                        trace("bad!");
-                    }else if (result.type == CompletionResult.TYPE_SINGLE){
-                        completeLineWith(  result.results[0]);
-                    }else{
-                        
-                        addToOutput(result.results.join(" "));
-                        moveCursorToEnd();
-                    }
-                    evt.preventDefault();
+            public function handleTabPress(evt : KeyboardEvent) : void {
+                var partialInput : String = getLastLine();
+                var result : CompletionResult = shell.getCompletion(partialInput);
+                if (result.type == CompletionResult.TYPE_ERROR){
+                    trace("bad!");
+                }else if (result.type == CompletionResult.TYPE_SINGLE){
+                    completeLineWith(  result.results[0]);
+                }else{
+                    addToOutput(result.results.join(" "));
+                    moveCursorToEnd();
                 }
+                evt.preventDefault();
+            }
+            
+            public function handleKeyArrow(evt : KeyboardEvent):void{
+                var isUp : Boolean = evt.keyCode == Keyboard.UP 
+                
+                
+                var charIndex : int = outText.field.caretIndex;
+                if(charIndex == outText.text.length){
+                    charIndex --;
+                }
+                
+                var historyCommand :String 
+                if(isUp){
+                    if (!shell.history.isFirst)
+                        historyCommand = shell.history.previous();
+                }else{
+                    if (! shell.history.isLast){
+                        historyCommand = shell.history.next();
+                    }else{
+                        historyCommand = "";
+                    }
+                        
+                }
+                if(historyCommand != null){
+                    replaceLastLine(historyCommand);
+                }
+                moveCursorToEnd();
+                
+            }
+            public function onControlKeyPressed( evt : KeyboardEvent) : void{
+                
+                
+                //trace(outText.field.getLineIndexOfChar(outText.field.caretIndex));
+                switch (evt.keyCode){
+                    case Keyboard.TAB:
+                        handleTabPress(evt);
+                        break;
+                     case Keyboard.UP:
+                     case Keyboard.DOWN:   
+                        
+                        evt.preventDefault();
+                        evt.stopImmediatePropagation();
+                        handleKeyArrow(evt);
+                        break;   
+                } 
+                evt.updateAfterEvent();
             }
         ]]>
     </mx:Script>

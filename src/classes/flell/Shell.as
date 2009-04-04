@@ -10,9 +10,9 @@ package flell {
         public var environment : Environment;
         public  var defaultCommands : Array = [Echo, Ls, Cd, Pwd];
         public var stage : Stage;
-        public static var NUM_HISTORY_ITEMS : int = 200;
-        public var history : Array = [];
-        public var historyCursor : int;
+        
+        public var history : HistoryManager;
+        
         
 		public function Shell(){
 			super();
@@ -21,6 +21,7 @@ package flell {
 		public function init(stage : Stage) : void{
 		    this.stage  = stage;
 		    environment = new Environment(stage);
+		    history = new HistoryManager();
 		    var commandClass: Class;
 		    for (var i:int = 0; i<defaultCommands.length; i++){
 		        
@@ -47,8 +48,7 @@ package flell {
 		    var rest : String = text.substr(match.index + name.length +1);
 		    var output : String  = String(command.executeRaw(rest));
 		    dispatchEvent(new OutputEvent(OutputEvent.OUTPUT, true, false, output));
-		    addToHistory(text);
-		    historyCursor = history.length -1;
+		    history.add(text);
 		    return output;
 		}
 		
@@ -72,8 +72,17 @@ package flell {
 		        result = new CompletionResult(possibleCommands);
 		    }else{
 		        // should be a path:
-		        var possiblePaths : Array = getCompletionsForPath(raw[raw.length -1]);
-		        result = new CompletionResult(possiblePaths);
+		        var partialInput : String = raw[raw.length -1];
+		        //trace('"' + partialInput + '"');
+		        if( partialInput == ""){
+		            result = new CompletionResult([]);
+		        }else{
+		            var possiblePaths : Array = getCompletionsForPath(partialInput);
+		            result = new CompletionResult(possiblePaths);
+		        }
+		        
+		        
+		        
 		    }
 		    return result;
 		}
@@ -103,31 +112,6 @@ package flell {
 		    });
 		}
 		
-		public function addToHistory(text : String) : void{
-		    if (history.length >= NUM_HISTORY_ITEMS){
-		        history.shift();
-		    }
-		    history.push(text);
-		}
 		
-		public function historyBack() : String{
-		    historyCursor --;
-		    if (historyCursor >= 0){
-		        return history[historyCursor];
-		    }else{
-		        historyCursor = 0;
-		    }
-		    return null;
-		}
-		
-		public function historyForwards() : String{
-		    historyCursor ++;
-		    if (historyCursor < history.length){
-		        return history[historyCursor];
-		    }else{
-		        historyCursor = history.length;
-		    }
-		    return null;
-		}
 	}	
 }

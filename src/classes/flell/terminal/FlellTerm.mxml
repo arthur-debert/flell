@@ -11,6 +11,7 @@
     
     <mx:Script>
         <![CDATA[
+            import mx.charts.AreaChart;
             import flell.tests.FlellTestSuite;
             import flell.tests.BaseFlellTestCase;
             import flell.CompletionResult;
@@ -58,7 +59,7 @@
             }
             
             public function getNumberLines () : int{
-                return outText.text.split("\r").length;
+                return getLines().length;
             }
             
             public function replaceLastLine(newValue : String):void{
@@ -90,6 +91,22 @@
             
             public function moveCursorToEnd() : void{
                 outText.setSelection(outText.text.length,outText.text.length );
+            }
+            
+            public function getLines() : Array{
+                return outText.text.split("\r");
+            }
+            public function moveCursorToLastLine() : void{
+                var numLines : int = getNumberLines();
+                var caretPos : int = 0;
+                var currentLineNum : int = 0;
+                var lines : Array = getLines();
+                while (currentLineNum < numLines){
+                    caretPos += lines[currentLineNum].length;
+                    currentLineNum ++;
+                }
+                caretPos += getDelimeter().length;
+                outText.setSelection(caretPos,caretPos );   
             }
             
             public function onInputText ( e : TextEvent) : void{
@@ -152,10 +169,46 @@
                 moveCursorToEnd();
                 
             }
+            
+            public function getCharsInLines(start : int = 0, end : int = 0 ): int{
+                if (end == 0){
+                    end = getNumberLines();
+                }
+                var numLines : int = getNumberLines();
+                var chars : int = 0;
+                var currentLineNum : int = start;
+                var lines : Array = getLines();
+                while (currentLineNum < end -1){
+                    chars += lines[currentLineNum].length;
+                    currentLineNum ++;
+                }
+                return chars;
+            }
+            
+            public function get caretCurrentLine() : int{
+                var numLines : int = getNumberLines();
+                var caretPos : int = 0;
+                var currentLineNum : int = 0;
+                var lines : Array = getLines();
+                while (caretPos < outText.field.caretIndex){
+                    caretPos += lines[currentLineNum].length;
+                    currentLineNum ++;
+                    if (currentLineNum == lines.length) break;
+                    
+                }
+                return currentLineNum; 
+                
+            }
+            
+            public function handleLeftKey() : void{
+                var lastLineBeginIndex : int = outText.text.lastIndexOf(getDelimeter()) + getDelimeter().length;
+                if (outText.field.caretIndex <= lastLineBeginIndex){
+                    outText.setSelection(lastLineBeginIndex, lastLineBeginIndex);
+                }
+                
+            }
             public function onControlKeyPressed( evt : KeyboardEvent) : void{
                 
-                
-                //trace(outText.field.getLineIndexOfChar(outText.field.caretIndex));
                 switch (evt.keyCode){
                     case Keyboard.TAB:
                         handleTabPress(evt);
@@ -166,7 +219,9 @@
                         evt.preventDefault();
                         evt.stopImmediatePropagation();
                         handleKeyArrow(evt);
-                        break;   
+                        break;
+                      case Keyboard.LEFT:
+                        handleLeftKey(); 
                 } 
                 evt.updateAfterEvent();
             }

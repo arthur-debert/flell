@@ -50,10 +50,17 @@
             public function clearTerm(e: Event = null) : void{
                 outText.text = SHELL_DELIMETER;
                 moveCursorToEnd();
+                outText.setFocus();
             }
             
             public function copyText(e : Event = null) : void{
-                
+                outText.setFocus();
+                var buffer : Array = ["### begin history ###"];
+                buffer = buffer.concat(shell.history.data);
+                buffer.push("### end history ###");
+                buffer.push("### begin output ###");
+                buffer.push(outText.text);
+                System.setClipboard(buffer.join("\r"));
             }
             
             

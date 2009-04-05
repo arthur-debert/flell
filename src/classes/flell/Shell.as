@@ -32,7 +32,8 @@ package flell {
 		    dispatchEvent(new Event("initDone"));
 		}
 		
-		public function executeRaw(text : String) : String{;
+		public function executeRaw(text : String) : String{
+		    if(text.length==0) return "";
 		    //var COMMAND_RE : RegExp = /^\b(P?<name>[\w\d]+)\b\b(P?<flag>-[\w\d]+)()
 		    var COMMAND_RE : RegExp = /^\b(?P<name>[\w\d]+)\b\s*/g;
 		    var match : Object = COMMAND_RE.exec(text);

@@ -5,12 +5,14 @@
             <mx:Button label="clear" id="clearButton"/>
             <mx:Button label="copy" id="copyButton"/>
         </mx:HBox>
-        <flell:OpenTextArea width="780" height="380" text="" id="outText" />
+        <flell:OpenTextArea width="100%" height="100%" text="" id="outText" />
         
     </mx:VBox>
     
     <mx:Script>
         <![CDATA[
+            import mx.events.ResizeEvent;
+            import mx.events.FlexEvent;
             import mx.charts.AreaChart;
             import flell.tests.FlellTestSuite;
             import flell.tests.BaseFlellTestCase;
@@ -26,8 +28,8 @@
                 clearButton.addEventListener(MouseEvent.CLICK, clearTerm);
                 copyButton.addEventListener(MouseEvent.CLICK, copyText);
                 outText.addEventListener(TextEvent.TEXT_INPUT, onInputText, true);
+                outText.addEventListener(FlexEvent.VALUE_COMMIT, scrollToLastLine, false, int.MIN_VALUE);
                 outText.addEventListener(KeyboardEvent.KEY_UP, onControlKeyPressed, true, int.MIN_VALUE, true);
-                
                 shell = new Shell();
                 shell.init(this.stage);
                 clearTerm();    
@@ -82,6 +84,7 @@
             public function getDelimeter() : String{
                 return SHELL_DELIMETER;
             }
+            
             public function completeLineWith(completion : String) : void{
                 var commandRaw : String = getLastLine();
                 var lines : Array = outText.text.split("\r");  
@@ -97,11 +100,13 @@
             
             public function moveCursorToEnd() : void{
                 outText.setSelection(outText.text.length,outText.text.length );
+                outText.verticalScrollPosition = outText.maxVerticalScrollPosition;
             }
             
             public function getLines() : Array{
                 return outText.text.split("\r");
             }
+            
             public function moveCursorToLastLine() : void{
                 var numLines : int = getNumberLines();
                 var caretPos : int = 0;
@@ -132,6 +137,10 @@
                     moveCursorToEnd();
                 }
                 
+            }
+            
+            public function scrollToLastLine(...rest) : void{
+                outText.verticalScrollPosition = outText.maxVerticalScrollPosition;
             }
             
             public function handleTabPress(evt : KeyboardEvent) : void {

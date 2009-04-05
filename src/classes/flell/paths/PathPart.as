@@ -90,7 +90,7 @@ package flell.paths {
 		
 		public function nameMatches(toMatch : String) : Boolean{
 		    var srcName : String = source.name;
-		    return source.name.search(new RegExp(toMatch)) > -10;
+		    return srcName.search(new RegExp(toMatch)) == 0;
 		}
 		
 		public function toString() : String{

@@ -86,29 +86,35 @@ package flell {
 		    }
 		    return result;
 		}
-		public function getCompletionsForPath(path : String) : Array{
-		    
-		    //var pathStart : PathPart = environment.currentDir;
-		    var pathParts : Array = path.split("/");
-		    var searchFrom : PathPart = environment.currentDir;
+		public function getCompletionsForPath(path : String, debug:Boolean=false) : Array{
+		    var origin : PathPart = environment.currentDir;
 		    if(path.charAt(0) == PathResolver.PATH_SEPARATOR){
-		        searchFrom = PathResolver.getFrom(environment.stage);
+		        origin = PathResolver.getFrom(environment.stage);
 		    }
 		    
-		    var basePath : PathPart = null;
+		    var pathParts : Array = path.split("/");
+		    
+		    var parent : PathPart = null;
+		    var pathToMatch : String = path;
 		    if (pathParts.length > 1){
-		        basePath = resolvePath(environment,  pathParts.slice(0, -1).join(PathResolver.PATH_SEPARATOR ) ); 
-		        if (!basePath){
+		        var parentPathStr : String = path.substring(0, path.lastIndexOf(PathResolver.PATH_SEPARATOR));
+		        parent = resolvePath(environment,  parentPathStr);
+		        pathToMatch = pathParts[pathParts.length-1]; 
+		        if (!parent){
 		            return []; 
 		        }
 		    }else{
-		        basePath = environment.currentDir;
+		        parent = environment.currentDir;
 		    }
-
-		    return  basePath.children.filter(function(pathPart : PathPart, ...rest) : Boolean{
-		        return pathPart.nameMatches(path);
-		    }).map(function ( p : PathPart, ...rest) : String{
-		       return p.fullPath; 
+            if(debug)trace(path, ", matching agains parent:", parent.fullPath, parent.children);
+            
+            var childrenMatched : Array = parent.children.filter(function(pathPart : PathPart, ...rest) : Boolean{
+		        if(debug)trace("inside match..", "pathToMatch:", pathToMatch,", match against:",  pathPart, ", matches:", pathPart.nameMatches(path));
+		        return pathPart.nameMatches(pathToMatch);
+		    });
+		    if(debug)trace("childrenMatched", childrenMatched);
+		    return childrenMatched.map(function ( p : PathPart, ...rest) : String{
+		       return childrenMatched.length == 1 ? p.fullPath : p.toString(); 
 		    });
 		}
 		

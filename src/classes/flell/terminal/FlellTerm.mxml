@@ -70,7 +70,13 @@
                 
             }
             public function addToOutput(text : String) : void{
-                outText.text +=  "\r"+ text + "\r" + getDelimeter();
+                var buffer :String = "";
+                if(text.length >0){
+                    buffer +=  "\r"+ text ;
+                }
+                 
+                buffer += "\r" + getDelimeter();
+                outText.text += buffer;
             }
             
             public function getDelimeter() : String{

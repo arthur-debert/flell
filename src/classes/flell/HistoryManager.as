@@ -1,5 +1,7 @@
 package flell
 {
+    import flash.net.SharedObject;
+    
     /**
      * Keeps track of shell command history, does cursor movement on it and retrieves it's items.
      *  
@@ -12,10 +14,12 @@ package flell
         public var data : Array;
         public static var NUM_HISTORY_ITEMS : int = 200;
         public var _index : int ;
+        public var persistToSharedObject : Boolean = true;
+        public var sharedObjectIdentifier : String = "shell";
         
         public function HistoryManager()
         {
-            data = [];
+            data = persistToSharedObject ? retrieveLocalHistory() : [];
         }
         
         public function get index() : int{
@@ -33,8 +37,33 @@ package flell
 		    }
 		    data.push(text);
 		    index = data.length ;
+		    if(persistToSharedObject){
+		        writeToDisk();
+		    }
 		}
 		
+		public function writeToDisk() : void{
+		    try{
+		        var so : SharedObject = SharedObject.getLocal("flell");
+		        so.data.history = data;
+		        so.flush();
+		    }catch(e : Error){
+		        // do nothing
+		    }
+		    
+		}
+		
+		public function retrieveLocalHistory() : Array{
+		    try{
+		        var so : SharedObject = SharedObject.getLocal("flell");
+		        if (so.data.history){
+		          return so.data.history
+		        } 
+		    }catch(e : Error){
+		        // do nothing
+		    }
+		    return [];
+		}
 		public function get isFirst () : Boolean{
 		    return index == 0;
 		}
@@ -64,9 +93,7 @@ package flell
 		}
 		
 		public function get current () : String{
-		    
 		    var historyCommand : String =  data[index];
-		    trace(index, historyCommand);
 		    if(!historyCommand) return ""; 
 		    return data[index];
 		}

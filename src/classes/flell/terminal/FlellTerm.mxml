@@ -143,6 +143,7 @@
                     completeLineWith(  result.results[0]);
                 }else{
                     addToOutput(result.results.join(" "));
+                    completeLineWith(partialInput);
                     moveCursorToEnd();
                 }
                 evt.preventDefault();

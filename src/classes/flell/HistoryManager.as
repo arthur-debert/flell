@@ -44,7 +44,7 @@ package flell
 		
 		public function writeToDisk() : void{
 		    try{
-		        var so : SharedObject = SharedObject.getLocal("flell");
+		        var so : SharedObject = SharedObject.getLocal(sharedObjectIdentifier);
 		        so.data.history = data;
 		        so.flush();
 		    }catch(e : Error){
@@ -55,7 +55,7 @@ package flell
 		
 		public function retrieveLocalHistory() : Array{
 		    try{
-		        var so : SharedObject = SharedObject.getLocal("flell");
+		        var so : SharedObject = SharedObject.getLocal(sharedObjectIdentifier);
 		        if (so.data.history){
 		          return so.data.history
 		        } 

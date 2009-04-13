@@ -14,8 +14,8 @@
             import mx.events.ResizeEvent;
             import mx.events.FlexEvent;
             import mx.charts.AreaChart;
-            import flell.tests.FlellTestSuite;
-            import flell.tests.BaseFlellTestCase;
+            /*import flell.tests.FlellTestSuite;
+                        import flell.tests.BaseFlellTestCase;*/
             import flell.CompletionResult;
             import mx.messaging.channels.StreamingAMFChannel;
             import flell.Shell;
@@ -25,6 +25,14 @@
             public static var SHELL_DELIMETER : String = "$";
             
             public function onCreationComplete() : void{
+				doInit();
+                /*FlellTestSuite.stage = stage;
+                                var t : BaseFlellTestCase = new BaseFlellTestCase("fdf");
+                                t.setUp();*/
+            }
+            
+            public function doInit() : void{
+				trace("initing terminal");
                 clearButton.addEventListener(MouseEvent.CLICK, clearTerm);
                 copyButton.addEventListener(MouseEvent.CLICK, copyText);
                 outText.addEventListener(TextEvent.TEXT_INPUT, onInputText, true);
@@ -37,12 +45,8 @@
                 tabEnabled = tabChildren = false;
                 outText.setFocus();
                 focusManager.deactivate();
-                FlellTestSuite.stage = stage;
-                var t : BaseFlellTestCase = new BaseFlellTestCase("fdf");
-                t.setUp();
-            }
-            
-            
+			}
+			
             public function clearTerm(e: Event = null) : void{
                 outText.text = SHELL_DELIMETER;
                 moveCursorToEnd();

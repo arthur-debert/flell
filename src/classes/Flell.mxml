@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*" xmlns:runners="kisstest.runners.*" creationComplete="handleCreation()" xmlns:runners1="br.com.stimuli.kisstest.runners.*"
-    width="1500" height="800"
->
-    <mx:Script>
-        <![CDATA[
-            import flell.terminal.FlellTerm;
-            //import flell.FlellTerminal;
-        import flell.tests.FlellTestSuite;
-        import br.com.stimuli.kisstest.runners.GUIFlexRunner;
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="handleCreation()" width="900" height="700" backgroundGradientAlphas="[0.2,0.2]" backgroundAlpha="0" backgroundColor="#000000">
+
+<mx:Script>
+    <![CDATA[
+           import flell.terminal.FlellTerm;
+            
         
         
         public function handleCreation() : void{
@@ -15,17 +12,11 @@
         }
         
         public function onAddedToStage(e : Event) :void{
-            //var suite : FlellTestSuite = new FlellTestSuite();
-            
-            //suite.init(stage);
-            //runner.createAndRun("Flell test suite", suite);
             var terminal : FlellTerm = new FlellTerm();
+            terminal.title = "Flell :: " + root.loaderInfo.url;
             addChild(terminal);    
         }
-        ]]>
-    </mx:Script>
-    <runners1:GUIFlexRunner id="runner">
+    ]]>
+</mx:Script>
         
-    </runners1:GUIFlexRunner>
-
 </mx:Application>

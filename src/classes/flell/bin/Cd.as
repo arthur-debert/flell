@@ -19,7 +19,12 @@ package flell.bin {
 		override public function execute(options : Array, args : Array) : Output{
 		    try{
 		        var toPath : PathPart = resolvePath(environment, args[0] || "/");            
-                environment.currentDir = toPath;
+		        if(toPath){
+		            environment.currentDir = toPath;
+		        }else{
+		            throw new Error("bad path");
+		        }
+                
                 return new Output("", 0);
 		    }catch(e : Error){
 		        

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="handleCreation()" width="900" height="700" backgroundGradientAlphas="[0.2,0.2]" backgroundAlpha="0" backgroundColor="#000000">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="handleCreation()" 
+	width="900" height="700" backgroundGradientAlphas="[0.2,0.2]" backgroundAlpha="0" backgroundColor="#000000">
 
 <mx:Script>
     <![CDATA[
